@@ -15,11 +15,16 @@ function os.shutdown()
         else
             sShell = "rom/programs/shell.lua"
         end
-        os.run({ shell = shell }, sShell)
+        os.run({ shell = shell, multishell = multishell }, sShell)
         os.run({}, "rom/programs/shutdown.lua")
     end, function()
-        if fs.exists("sysc/sysc.lua") then
-            os.run({}, "sysc/sysc.lua")
+        if fs.exists("sysc/syscd.lua") then
+            os.run({
+                shell = shell,
+                require = require,
+                package = package,
+                multishell = multishell,
+            }, "/sysc/syscd.lua")
         else
             while true do
                 coroutine.yield("-")
